@@ -1,0 +1,81 @@
+Construction CDE / Ticketing System - Demo Page & Workflow List
+
+Source: High-level interpretation from provided architecture image
+(Access & Control Layer -> Core CDE Platform -> Integration Layer)
+
+1) Suggested Demo Pages (High Level)
+
+A. Access & Control Layer
+1. Login Page
+2. User Registration Page
+3. Role & Permission Management (RBAC) Page
+4. Permission Matrix Page (View / Review / Approve)
+5. Audit Logs Page
+
+B. Core CDE Platform
+6. Dashboard Page (overall project and ticket/document KPIs)
+7. Data Storage & Register Page
+8. Document Repository / Register Page (drawings, docs, assets)
+9. Document Upload & Metadata Page
+10. Workflow Engine Page (review/approval stages)
+11. Workflow Configuration Page (WIP -> Shared -> Published -> Archive)
+12. Quality Management Page
+13. Compliance & Validation Page
+14. Non-Conformance Tracking Page
+15. Transmittal & Correspondence Page
+16. Formal Transmittals Page
+17. Incoming / Outgoing Communication Log Page
+18. Document Revision History Page
+
+C. External Systems / Connectors
+19. Integrations Overview Page
+20. BIM Connector Page (Revit / IFC / Navisworks)
+21. Project Management Connector Page
+22. ERP / Finance Connector Page
+23. CAFM / FM Connector Page
+
+D. Integration Layer / Outputs
+24. As-Built Documentation Page
+25. Asset Data Export Page
+26. O&M Manuals Page
+27. Long-Term Archive Page
+
+E. Common Utility Pages (for practical demo)
+28. Notifications Page
+29. Profile / User Settings Page
+30. Search & Global Filters Page
+
+
+2) Suggested Demo Workflows (High Level)
+
+Workflow 1: Secure Access
+Login / Register -> Role assignment (RBAC) -> Permission check -> Access granted -> Audit log entry
+
+Workflow 2: Document Upload & Metadata
+Select project/folder -> Upload file (PDF/DWG/DOC) -> Enter metadata (discipline/status/revision/date) -> Save to register
+
+Workflow 3: Review & Approval
+Document in WIP -> Review task assigned -> Approve/Reject comments -> Move to Shared/Published -> Notify stakeholders
+
+Workflow 4: Revision Control
+Published document updated -> New revision uploaded -> Version comparison/history updated -> Old revision retained
+
+Workflow 5: Quality & Compliance
+Run quality/compliance checks -> Raise non-conformance if issues found -> Assign corrective action -> Close on validation
+
+Workflow 6: Transmittal & Correspondence
+Create formal transmittal -> Attach linked documents/revisions -> Send to external/internal recipients -> Track acknowledgment
+
+Workflow 7: Integration Sync
+Approved/published data -> Sync to BIM/PM/ERP/CAFM connectors -> Validate sync status -> Log results
+
+Workflow 8: Archive & Handover
+Project closeout trigger -> Compile as-built docs + asset data + O&M manuals -> Move to long-term archive
+
+Workflow 9: Audit & Traceability
+Any critical action (login, upload, review, approval, revision, transmittal) -> Capture timestamp/user/action -> View in audit logs
+
+
+3) Minimal Demo Navigation (Recommended)
+Dashboard -> Documents -> Workflow -> Quality -> Transmittals -> Integrations -> Archive -> Admin (Users/Roles/Audit)
+

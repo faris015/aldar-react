@@ -1,49 +1,33 @@
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 import './App.css';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
+import DemoLayout from './components/layout/DemoLayout';
+import TicketsPage from './pages/TicketsPage';
+import TicketDetailPage from './pages/TicketDetailPage';
+import WorkflowTasksPage from './pages/WorkflowTasksPage';
+import ReviewScreenPage from './pages/ReviewScreenPage';
+import { TicketStoreProvider } from './context/TicketStore';
 
 function App() {
+  const [role, setRole] = useState('Developer');
+
   return (
-    <BrowserRouter>
-      <div className="app-shell">
-        <nav className="app-nav">
-          <div className="nav-left">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) => (isActive ? 'active-link' : '')}
-            >
-              Dashboard
-            </NavLink>
-          </div>
+    <TicketStoreProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<DemoLayout role={role} onRoleChange={setRole} />}>
+            <Route index element={<Navigate to="/tickets" replace />} />
 
-          <NavLink
-            to="/profile"
-            className={({ isActive }) =>
-              `profile-link ${isActive ? 'active-link' : ''}`
-            }
-          >
-            <svg
-              className="profile-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4m0 2c-4.41 0-8 1.79-8 4v2h16v-2c0-2.21-3.59-4-8-4" />
-            </svg>
-            <span>faris</span>
-          </NavLink>
-        </nav>
+            <Route path="tickets" element={<TicketsPage />} />
+            <Route path="tickets/:ticketId" element={<TicketDetailPage />} />
 
-        <main className="page-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+            <Route path="workflow" element={<WorkflowTasksPage />} />
+            <Route path="workflow/review/:ticketId" element={<ReviewScreenPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </TicketStoreProvider>
   );
 }
 
