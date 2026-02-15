@@ -40,31 +40,41 @@ function TicketListPage() {
             </tr>
           </thead>
           <tbody>
-            {tickets.map((ticket) => (
-              <tr key={ticket.id}>
-                <td>{ticket.id}</td>
-                <td>{ticket.title}</td>
-                <td>{ticket.project}</td>
-                <td>{ticket.discipline}</td>
-                <td><StatusChip status={ticket.status} /></td>
-                <td><PriorityChip priority={ticket.priority} /></td>
-                <td>{ticket.assignedTo}</td>
-                <td>{ticket.slaStatus}</td>
-                <td>{ticket.lastUpdated}</td>
-                <td>
-                  <button type="button" className="link-btn" onClick={() => navigate(`/tickets/${ticket.id}`)}>View</button>
-                  <button type="button" className="link-btn">Edit</button>
-                </td>
+            {tickets.length === 0 ? (
+              <tr>
+                <td className="empty-state-cell" colSpan={10}>No tickets found</td>
               </tr>
-            ))}
+            ) : (
+              tickets.map((ticket) => (
+                <tr key={ticket.id}>
+                  <td>{ticket.id}</td>
+                  <td>{ticket.title}</td>
+                  <td>{ticket.project}</td>
+                  <td>{ticket.discipline}</td>
+                  <td><StatusChip status={ticket.status} /></td>
+                  <td><PriorityChip priority={ticket.priority} /></td>
+                  <td>{ticket.assignedTo}</td>
+                  <td>{ticket.slaStatus}</td>
+                  <td>{ticket.lastUpdated}</td>
+                  <td>
+                    <button type="button" className="link-btn" onClick={() => navigate(`/tickets/${ticket.id}`)}>View</button>
+                    <button type="button" className="link-btn">Edit</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       <div className="mobile-ticket-list">
-        {tickets.map((ticket) => (
-          <TicketCard key={ticket.id} ticket={ticket} onClick={() => navigate(`/tickets/${ticket.id}`)} />
-        ))}
+        {tickets.length === 0 ? (
+          <p className="empty-state-text">No tickets found</p>
+        ) : (
+          tickets.map((ticket) => (
+            <TicketCard key={ticket.id} ticket={ticket} onClick={() => navigate(`/tickets/${ticket.id}`)} />
+          ))
+        )}
       </div>
     </section>
   );

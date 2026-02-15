@@ -325,6 +325,20 @@ a {
   color: var(--muted);
 }
 
+.empty-state-cell {
+  padding: 1rem 0.6rem;
+  text-align: center !important;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.empty-state-text {
+  margin: 0;
+  padding: 0.35rem 0.2rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .text-link {
   display: inline-block;
   margin-top: 0.6rem;

@@ -203,34 +203,44 @@ function TicketsPage() {
             </tr>
           </thead>
           <tbody>
-            {visibleTickets.map((ticket) => (
-              <tr key={ticket.id}>
-                <td><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></td>
-                <td>{ticket.type}</td>
-                <td>{ticket.title}</td>
-                <td>{ticket.project}</td>
-                <td>{ticket.createdByRole}</td>
-                <td>{ticket.currentOwnerRole}</td>
-                <td>{ticket.stageGate}</td>
-                <td>{ticket.status}</td>
-                <td className="created-date-col">{ticket.createdDate}</td>
+            {visibleTickets.length === 0 ? (
+              <tr>
+                <td className="empty-state-cell" colSpan={9}>No tickets found</td>
               </tr>
-            ))}
+            ) : (
+              visibleTickets.map((ticket) => (
+                <tr key={ticket.id}>
+                  <td><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></td>
+                  <td>{ticket.type}</td>
+                  <td>{ticket.title}</td>
+                  <td>{ticket.project}</td>
+                  <td>{ticket.createdByRole}</td>
+                  <td>{ticket.currentOwnerRole}</td>
+                  <td>{ticket.stageGate}</td>
+                  <td>{ticket.status}</td>
+                  <td className="created-date-col">{ticket.createdDate}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
         <div className="mobile-cards">
-          {visibleTickets.map((ticket) => (
-            <article key={ticket.id} className="mobile-card">
-              <h4><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></h4>
-              <p>{ticket.type}</p>
-              <p>{ticket.title}</p>
-              <p>{ticket.createdByRole} -> {ticket.reviewByRole}</p>
-              <p>{ticket.stageGate}</p>
-              <p>{ticket.status}</p>
-              <small>Created {ticket.createdDate}</small>
-            </article>
-          ))}
+          {visibleTickets.length === 0 ? (
+            <p className="empty-state-text">No tickets found</p>
+          ) : (
+            visibleTickets.map((ticket) => (
+              <article key={ticket.id} className="mobile-card">
+                <h4><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></h4>
+                <p>{ticket.type}</p>
+                <p>{ticket.title}</p>
+                <p>{ticket.createdByRole} -> {ticket.reviewByRole}</p>
+                <p>{ticket.stageGate}</p>
+                <p>{ticket.status}</p>
+                <small>Created {ticket.createdDate}</small>
+              </article>
+            ))
+          )}
         </div>
       </article>
     </section>

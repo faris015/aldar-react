@@ -195,49 +195,59 @@ function WorkflowTasksPage() {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.id}</td>
-                <td>{task.title}</td>
-                <td>{task.createdByRole}</td>
-                <td>{task.reviewByRole}</td>
-                <td>{task.stageGate}</td>
-                <td>{task.status}</td>
-                <td>{task.currentOwnerRole}</td>
-                <td className="created-date-col">{task.createdDate}</td>
-                <td>
-                  {role === 'Contractor' ? (
-                    <button type="button" className="btn btn-secondary" onClick={() => openUpdateForm(task)}>
-                      Update
-                    </button>
-                  ) : (
-                    <Link to={`/workflow/review/${task.id}`}>Open Review</Link>
-                  )}
-                </td>
+            {tasks.length === 0 ? (
+              <tr>
+                <td className="empty-state-cell" colSpan={9}>No tickets found</td>
               </tr>
-            ))}
+            ) : (
+              tasks.map((task) => (
+                <tr key={task.id}>
+                  <td>{task.id}</td>
+                  <td>{task.title}</td>
+                  <td>{task.createdByRole}</td>
+                  <td>{task.reviewByRole}</td>
+                  <td>{task.stageGate}</td>
+                  <td>{task.status}</td>
+                  <td>{task.currentOwnerRole}</td>
+                  <td className="created-date-col">{task.createdDate}</td>
+                  <td>
+                    {role === 'Contractor' ? (
+                      <button type="button" className="btn btn-secondary" onClick={() => openUpdateForm(task)}>
+                        Update
+                      </button>
+                    ) : (
+                      <Link to={`/workflow/review/${task.id}`}>Open Review</Link>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
         <div className="mobile-cards">
-          {tasks.map((task) => (
-            <article key={task.id} className="mobile-card">
-              <h4>{task.id}</h4>
-              <p>{task.title}</p>
-              <p>{task.createdByRole} -> {task.reviewByRole}</p>
-              <p>{task.stageGate}</p>
-              <p>{task.status}</p>
-              <p>Owner: {task.currentOwnerRole}</p>
-              <small>Created {task.createdDate}</small>
-              {role === 'Contractor' ? (
-                <button type="button" className="btn btn-secondary" onClick={() => openUpdateForm(task)}>
-                  Update
-                </button>
-              ) : (
-                <Link to={`/workflow/review/${task.id}`} className="text-link">Open Review</Link>
-              )}
-            </article>
-          ))}
+          {tasks.length === 0 ? (
+            <p className="empty-state-text">No tickets found</p>
+          ) : (
+            tasks.map((task) => (
+              <article key={task.id} className="mobile-card">
+                <h4>{task.id}</h4>
+                <p>{task.title}</p>
+                <p>{task.createdByRole} -> {task.reviewByRole}</p>
+                <p>{task.stageGate}</p>
+                <p>{task.status}</p>
+                <p>Owner: {task.currentOwnerRole}</p>
+                <small>Created {task.createdDate}</small>
+                {role === 'Contractor' ? (
+                  <button type="button" className="btn btn-secondary" onClick={() => openUpdateForm(task)}>
+                    Update
+                  </button>
+                ) : (
+                  <Link to={`/workflow/review/${task.id}`} className="text-link">Open Review</Link>
+                )}
+              </article>
+            ))
+          )}
         </div>
       </article>
     </section>

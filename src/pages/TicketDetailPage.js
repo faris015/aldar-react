@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { useTicketStore } from '../context/TicketStore';
-import { getRoleCapability } from '../data/demoData';
 
 function parseStamp(stamp) {
   return new Date(String(stamp).replace(' ', 'T'));
@@ -21,13 +20,12 @@ function formatDuration(ms) {
 function TicketDetailPage() {
   const { ticketId } = useParams();
   const { role } = useOutletContext();
-  const { tickets, approveAndSend, finalApprove, resubmit, reviewTicket, sendBack } = useTicketStore();
+  const { tickets, approveAndSend, finalApprove, resubmit, sendBack } = useTicketStore();
 
   const ticket = useMemo(
     () => tickets.find((item) => item.id === ticketId) || tickets[0],
     [ticketId, tickets]
   );
-  const capability = getRoleCapability(role);
   const isOwner = ticket?.currentOwnerRole === role;
   const isDesignerStep = isOwner && role === 'Designer';
   const isDeveloperStep = isOwner && role === 'Developer';
@@ -124,9 +122,6 @@ function TicketDetailPage() {
             </span>
           ) : (
             <>
-              {(isDesignerStep || isDeveloperStep) && capability.review ? (
-                <button type="button" className="btn btn-secondary" onClick={() => reviewTicket(ticket.id, role)}>Review</button>
-              ) : null}
               {isContractorResubmit ? (
                 <button type="button" className="btn btn-tonal" onClick={() => resubmit(ticket.id, role)}>Upload Revision & Resubmit</button>
               ) : null}
