@@ -2,6 +2,15 @@ import { useMemo, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { ticketTypes } from '../data/demoData';
 import { useTicketStore } from '../context/TicketStore';
+import CadViewerModal from '../components/common/CadViewerModal';
+
+const DEMO_MODEL_URN = process.env.REACT_APP_APS_DEMO_URN || '';
+
+function isCadFile(file) {
+  const name = String(file?.name || '').toLowerCase();
+  const type = String(file?.type || '').toLowerCase();
+  return name.endsWith('.dwg') || name.endsWith('.dxf') || type.includes('dwg') || type.includes('dxf');
+}
 
 const defaultForm = {
   type: 'Shop Drawing Submission',
@@ -11,6 +20,7 @@ const defaultForm = {
   fileName: '',
   fileData: '',
   fileType: '',
+  cadUrn: '',
   discipline: 'Architectural',
   priority: 'High',
 };
@@ -22,6 +32,7 @@ function TicketsPage() {
   const [typeFilter, setTypeFilter] = useState('All');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [form, setForm] = useState(defaultForm);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   function setUploadedFile(file) {
     if (!file) {
@@ -30,10 +41,12 @@ function TicketsPage() {
         fileName: '',
         fileData: '',
         fileType: '',
+        cadUrn: '',
       }));
       return;
     }
 
+    const nextCadUrn = isCadFile(file) ? DEMO_MODEL_URN : '';
     const reader = new FileReader();
     reader.onload = () => {
       setForm((prev) => ({
@@ -41,10 +54,13 @@ function TicketsPage() {
         fileName: file.name,
         fileData: typeof reader.result === 'string' ? reader.result : '',
         fileType: file.type || '',
+        cadUrn: nextCadUrn,
       }));
     };
     reader.readAsDataURL(file);
   }
+
+  const isCadUpload = useMemo(() => isCadFile({ name: form.fileName, type: form.fileType }), [form.fileName, form.fileType]);
 
   const visibleTickets = useMemo(() => {
     const scopedTickets = role === 'Contractor'
@@ -149,7 +165,7 @@ function TicketsPage() {
               <input
                 id="ticket-file-upload"
                 type="file"
-                accept=".pdf,.dwg,.doc,.docx"
+                accept=".pdf,.dwg,.dxf,.doc,.docx"
                 onChange={(event) => setUploadedFile(event.target.files?.[0])}
               />
               <div
@@ -161,9 +177,25 @@ function TicketsPage() {
                 }}
               >
                 Drag and drop file here (Demo)
-                <small>Allowed: PDF, DWG, DOC, DOCX</small>
+                <small>Allowed: PDF, DWG, DXF, DOC, DOCX</small>
               </div>
-              {form.fileName ? <small>Selected: {form.fileName}</small> : null}
+              {form.fileName ? (
+                <div className="file-action-row">
+                  <small>Selected: {form.fileName}</small>
+                  {isCadUpload ? (
+                    <button type="button" className="btn btn-secondary btn-small" onClick={() => setIsViewerOpen(true)}>
+                      Viewer
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
+              {isCadUpload ? (
+                <div className="cad-preview-note">
+                  {form.cadUrn
+                    ? 'CAD preview ready for demo. Click Viewer to open the popup model viewer.'
+                    : 'DWG/DXF uploaded. Set REACT_APP_APS_DEMO_URN to enable popup preview.'}
+                </div>
+              ) : null}
             </label>
           </div>
           <div className="inline-actions">
@@ -171,6 +203,13 @@ function TicketsPage() {
           </div>
         </article>
       ) : null}
+
+      <CadViewerModal
+        open={isViewerOpen}
+        onClose={() => setIsViewerOpen(false)}
+        urn={form.cadUrn}
+        title="DWG Model Viewer"
+      />
 
       <article className="card filter-grid">
         <input

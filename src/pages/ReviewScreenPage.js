@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { useTicketStore } from '../context/TicketStore';
+import CadViewerModal from '../components/common/CadViewerModal';
 
 function ReviewScreenPage() {
   const { ticketId } = useParams();
   const { role } = useOutletContext();
   const { tickets, approveAndSend, finalApprove, sendBack } = useTicketStore();
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const ticket = useMemo(() => tickets.find((item) => item.id === ticketId), [ticketId, tickets]);
   const isOwner = ticket?.currentOwnerRole === role;
   const isDesignerStep = isOwner && role === 'Designer';
@@ -15,6 +17,12 @@ function ReviewScreenPage() {
     () => ticket?.history?.find((row) => row.role === role && ['Approve and Send', 'Final Approve', 'Send Back'].includes(row.action)),
     [role, ticket]
   );
+  const hasCadFile = useMemo(() => {
+    const fileName = String(ticket?.fileName || '').toLowerCase();
+    const fileType = String(ticket?.fileType || '').toLowerCase();
+    return fileName.endsWith('.dwg') || fileName.endsWith('.dxf') || fileType.includes('dwg') || fileType.includes('dxf');
+  }, [ticket]);
+  const cadUrn = ticket?.cadUrn || ticket?.apsUrn || '';
 
   if (!ticket) {
     return (
@@ -47,10 +55,21 @@ function ReviewScreenPage() {
             <li><span>Priority</span><small>{ticket.priority}</small></li>
             <li>
               <span>File</span>
-              {ticket.fileData && ticket.fileName ? (
-                <a href={ticket.fileData} download={ticket.fileName} className="text-link">
-                  {ticket.fileName}
-                </a>
+              {ticket.fileName ? (
+                <div className="file-action-row">
+                  {ticket.fileData ? (
+                    <a href={ticket.fileData} download={ticket.fileName} className="text-link">
+                      {ticket.fileName}
+                    </a>
+                  ) : (
+                    <small>{ticket.fileName}</small>
+                  )}
+                  {(hasCadFile || cadUrn) ? (
+                    <button type="button" className="btn btn-secondary btn-small" onClick={() => setIsViewerOpen(true)}>
+                      Viewer
+                    </button>
+                  ) : null}
+                </div>
               ) : (
                 <small>{ticket.fileName || 'No file uploaded'}</small>
               )}
@@ -101,6 +120,8 @@ function ReviewScreenPage() {
           </div>
         </article>
       </div>
+
+      <CadViewerModal open={isViewerOpen} onClose={() => setIsViewerOpen(false)} urn={cadUrn} title="DWG Model Viewer" />
     </section>
   );
 }

@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { useTicketStore } from '../context/TicketStore';
+import CadViewerModal from '../components/common/CadViewerModal';
 
 function parseStamp(stamp) {
   return new Date(String(stamp).replace(' ', 'T'));
@@ -21,6 +22,7 @@ function TicketDetailPage() {
   const { ticketId } = useParams();
   const { role } = useOutletContext();
   const { tickets, approveAndSend, finalApprove, resubmit, sendBack } = useTicketStore();
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const ticket = useMemo(
     () => tickets.find((item) => item.id === ticketId) || tickets[0],
@@ -57,6 +59,12 @@ function TicketDetailPage() {
       ? 'Completed final approval.'
       : `Awaiting ${ticket.currentOwnerRole} review/approval.`)
     : '';
+  const hasCadFile = useMemo(() => {
+    const fileName = String(ticket?.fileName || '').toLowerCase();
+    const fileType = String(ticket?.fileType || '').toLowerCase();
+    return fileName.endsWith('.dwg') || fileName.endsWith('.dxf') || fileType.includes('dwg') || fileType.includes('dxf');
+  }, [ticket]);
+  const cadUrn = ticket?.cadUrn || ticket?.apsUrn || '';
 
   if (!ticket) {
     return (
@@ -98,6 +106,16 @@ function TicketDetailPage() {
         <article className="card">
           <p><strong>Created:</strong> {ticket.createdAt} by {ticket.createdByRole}</p>
           <p><strong>Current State:</strong> {awaitingText}</p>
+          {ticket.fileName ? (
+            <p className="file-meta-line">
+              <strong>Attached File:</strong> {ticket.fileName}
+              {(hasCadFile || cadUrn) ? (
+                <button type="button" className="btn btn-secondary btn-small file-viewer-btn" onClick={() => setIsViewerOpen(true)}>
+                  Viewer
+                </button>
+              ) : null}
+            </p>
+          ) : null}
 
           <div className="flowchart-list">
             {flowSteps.map((step, index) => (
@@ -114,6 +132,8 @@ function TicketDetailPage() {
           </div>
 
         </article>
+
+        <CadViewerModal open={isViewerOpen} onClose={() => setIsViewerOpen(false)} urn={cadUrn} title="DWG Model Viewer" />
 
         <div className="inline-actions">
           {latestRoleAction ? (

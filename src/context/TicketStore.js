@@ -24,6 +24,7 @@ function normalizeTicket(ticket) {
     fileName: ticket.fileName || '',
     fileData: ticket.fileData || '',
     fileType: ticket.fileType || '',
+    cadUrn: ticket.cadUrn || ticket.apsUrn || '',
     currentOwnerRole: ticket.currentOwnerRole || ticket.reviewByRole,
     history: Array.isArray(ticket.history) ? ticket.history : [],
   };
@@ -85,6 +86,7 @@ function TicketStoreProvider({ children }) {
       fileName: form.fileName || '',
       fileData: form.fileData || '',
       fileType: form.fileType || '',
+      cadUrn: form.cadUrn || '',
       discipline: form.discipline,
       createdByRole: role,
       reviewByRole,
@@ -157,6 +159,7 @@ function reviewTicket(ticketId, role) {
         {
           ...ticket,
           ...updates,
+          cadUrn: updates.cadUrn || ticket.cadUrn || '',
           lifecycleStatus: 'Submitted',
           stageGate: 'WIP',
           status: `Updated and resubmitted to ${lastSendBackBy(ticket)}`,
