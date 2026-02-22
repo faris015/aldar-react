@@ -91,6 +91,12 @@ function TicketDetailPage() {
       ? 'Completed final approval.'
       : `Awaiting ${ticket.currentOwnerRole} review/approval.`)
     : '';
+  const hasCadFile = useMemo(() => {
+    const fileName = String(ticket?.fileName || '').toLowerCase();
+    const fileType = String(ticket?.fileType || '').toLowerCase();
+    return fileName.endsWith('.dwg') || fileName.endsWith('.dxf') || fileType.includes('dwg') || fileType.includes('dxf');
+  }, [ticket]);
+  const cadUrn = ticket?.cadUrn || ticket?.apsUrn || '';
 
   if (!ticket) {
     return (

@@ -113,6 +113,7 @@ function TicketsPage() {
       return;
     }
 
+    const nextCadUrn = isCadFile(file) ? DEMO_MODEL_URN : '';
     const reader = new FileReader();
     reader.onload = () => {
       updateFormField('fileName', file.name);
@@ -120,6 +121,8 @@ function TicketsPage() {
     };
     reader.readAsDataURL(file);
   }
+
+  const isCadUpload = useMemo(() => isCadFile({ name: form.fileName, type: form.fileType }), [form.fileName, form.fileType]);
 
   const visibleTickets = useMemo(() => {
     const scopedTickets = role === 'Contractor'
@@ -387,6 +390,13 @@ function TicketsPage() {
           </div>
         </article>
       ) : null}
+
+      <CadViewerModal
+        open={isViewerOpen}
+        onClose={() => setIsViewerOpen(false)}
+        urn={form.cadUrn}
+        title="DWG Model Viewer"
+      />
 
       <article className="card filter-grid">
         <input
