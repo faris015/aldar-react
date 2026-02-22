@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
+  --ui-scale: 0.9;
   --bg: #e9ecef;
   --surface: #ffffff;
   --surface-soft: #f8f9fb;
@@ -35,6 +36,15 @@ a {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  zoom: var(--ui-scale);
+}
+
+@supports not (zoom: 1) {
+  .demo-shell {
+    transform: scale(var(--ui-scale));
+    transform-origin: top left;
+    width: calc(100% / var(--ui-scale));
+  }
 }
 
 .topbar {
