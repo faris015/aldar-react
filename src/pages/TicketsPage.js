@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { ticketCreationMetadata, ticketTypes } from '../data/demoData';
+import { ticketCreationMetadata } from '../data/demoData';
 import { useTicketStore } from '../context/TicketStore';
 import formatStatusLabel from '../utils/formatStatusLabel';
 
@@ -74,11 +74,17 @@ function TicketsPage() {
   const { tickets: ticketList, createTicket } = useTicketStore();
   const formCardRef = useRef(null);
   const [query, setQuery] = useState('');
-  const [typeFilter, setTypeFilter] = useState('All');
+  const [disciplineFilter, setDisciplineFilter] = useState('All');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [form, setForm] = useState(createDefaultForm);
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
+
+  const disciplineOptions = useMemo(() => {
+    const metadataDisciplines = ticketCreationMetadata.disciplines || [];
+    const ticketDisciplines = ticketList.map((ticket) => ticket.discipline).filter(Boolean);
+    return Array.from(new Set([...metadataDisciplines, ...ticketDisciplines]));
+  }, [ticketList]);
 
   function getInputClass(name) {
     return touched[name] && errors[name] ? 'input-error' : '';
@@ -127,7 +133,7 @@ function TicketsPage() {
       : ticketList;
 
     return scopedTickets.filter((ticket) => {
-      const matchesType = typeFilter === 'All' || ticket.type === typeFilter;
+      const matchesDiscipline = disciplineFilter === 'All' || ticket.discipline === disciplineFilter;
       const haystack = [
         ticket.id,
         ticket.title,
@@ -143,9 +149,9 @@ function TicketsPage() {
         ticket.status,
       ].join(' ').toLowerCase();
       const matchesQuery = haystack.includes(query.toLowerCase());
-      return matchesType && matchesQuery;
+      return matchesDiscipline && matchesQuery;
     });
-  }, [query, role, ticketList, typeFilter]);
+  }, [disciplineFilter, query, role, ticketList]);
 
   function onCreateTicket() {
     if (role !== 'Contractor') return;
@@ -395,10 +401,10 @@ function TicketsPage() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)}>
+        <select value={disciplineFilter} onChange={(event) => setDisciplineFilter(event.target.value)}>
           <option>All</option>
-          {ticketTypes.map((type) => (
-            <option key={type}>{type}</option>
+          {disciplineOptions.map((discipline) => (
+            <option key={discipline}>{discipline}</option>
           ))}
         </select>
       </article>
