@@ -183,7 +183,7 @@ function TicketsPage() {
       <div className="screen-header">
         <div>
           <h2>Tickets</h2>
-          <p>Create submissions, track status flow, and process role-based workflow actions.</p>
+          <p>Submit new tickets, monitor workflow progress, and manage assignment handoffs.</p>
         </div>
         {role === 'Contractor' ? (
           <button type="button" className="btn" onClick={() => setShowCreateForm((prev) => !prev)}>
@@ -373,7 +373,7 @@ function TicketsPage() {
                       setUploadedFile(event.dataTransfer.files?.[0]);
                     }}
                   >
-                    Drag and drop file here (Demo)
+                    Drag and drop the submission file here
                     <small>Allowed: PDF, DWG, DOC, DOCX</small>
                   </div>
                   {form.fileName ? <small>Selected: {form.fileName}</small> : null}
@@ -391,7 +391,7 @@ function TicketsPage() {
       <article className="card filter-grid">
         <input
           type="search"
-          placeholder="Search by ticket id, title, project, status"
+          placeholder="Search by ticket ID, title, project, owner, or status"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />

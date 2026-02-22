@@ -217,7 +217,7 @@ function WorkflowTasksPage() {
                   setUploadedFile(event.dataTransfer.files?.[0]);
                 }}
               >
-                Drag and drop file here (Demo)
+                Drag and drop the revised file here
                 <small>Allowed: PDF, DWG, DOC, DOCX</small>
               </div>
               {updateForm.fileName ? <small>Selected: {updateForm.fileName}</small> : null}

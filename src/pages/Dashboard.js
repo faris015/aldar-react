@@ -32,7 +32,7 @@ function Dashboard() {
               </li>
             ))}
           </ul>
-          <Link to="/tickets" className="text-link">Open ticket queue</Link>
+          <Link to="/tickets" className="text-link">Go to ticket queue</Link>
         </article>
 
         <article className="card">
@@ -48,7 +48,7 @@ function Dashboard() {
               </li>
             ))}
           </ul>
-          <Link to="/workflow" className="text-link">Open approvals</Link>
+          <Link to="/workflow" className="text-link">Go to approval queue</Link>
         </article>
       </div>
 
@@ -62,7 +62,7 @@ function Dashboard() {
       </article>
 
       <article className="card">
-        <h3>End-to-End Demo Flow</h3>
+        <h3>End-to-End Workflow Journey</h3>
         <ol className="demo-flow-list">
           {demoJourneySteps.map((step) => (
             <li key={step}>{step}</li>
