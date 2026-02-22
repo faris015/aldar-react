@@ -9,7 +9,7 @@ import ReviewScreenPage from './pages/ReviewScreenPage';
 import { TicketStoreProvider } from './context/TicketStore';
 
 function App() {
-  const [role, setRole] = useState('Developer');
+  const [role, setRole] = useState('Contractor');
 
   return (
     <TicketStoreProvider>

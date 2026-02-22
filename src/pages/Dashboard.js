@@ -25,7 +25,7 @@ function Dashboard() {
             {tickets.map((ticket) => (
               <li key={ticket.id}>
                 <div>
-                  <strong>{ticket.id}</strong>
+                  <strong><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></strong>
                   <p>{ticket.title}</p>
                 </div>
                 <small>{ticket.status}</small>
@@ -41,7 +41,7 @@ function Dashboard() {
             {reviewTasks.map((task) => (
               <li key={task.id}>
                 <div>
-                  <strong>{task.ticketId}</strong>
+                  <strong><Link to={`/tickets/${task.ticketId}`}>{task.ticketId}</Link></strong>
                   <p>{task.title}</p>
                 </div>
                 <small>{task.stageGate} · {task.reviewer}</small>

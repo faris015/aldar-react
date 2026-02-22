@@ -1,14 +1,18 @@
 export const roleMenus = {
-  'Client': ['tickets', 'workflow'],
-  Developer: ['tickets', 'workflow'],
-  'Designer': ['tickets', 'workflow'],
+  'Internal Team Reviewer': ['tickets', 'workflow'],
+  'Internal Team Approver': ['tickets', 'workflow'],
+  'Consultant QA Team': ['tickets', 'workflow'],
+  'Consultant Reviewer': ['tickets', 'workflow'],
+  'Consultant Approver': ['tickets', 'workflow'],
   'Contractor': ['tickets', 'workflow'],
 };
 
 export const authorityOrder = [
-  'Client',
-  'Developer',
-  'Designer',
+  'Consultant Approver',
+  'Consultant Reviewer',
+  'Consultant QA Team',
+  'Internal Team Approver',
+  'Internal Team Reviewer',
   'Contractor',
 ];
 
@@ -24,42 +28,108 @@ export const ticketTypes = [
   'Transmittal',
 ];
 
+export const ticketCreationMetadata = {
+  projects: ['Project Name (PRJXX)'],
+  workPackages: [
+    'All Packages (ZZ)',
+    'Building Works (BW)',
+    'Commercial (CM)',
+    'Early Works (EW)',
+    'Infrastructure (IN)',
+    'Public Realm (PR)',
+  ],
+  originators: [
+    'Cost Consultant 01 (CC01)',
+    'Lead Design Consultant 01 (LDC01)',
+    'Lead Design Consultant 02 (LDC02)',
+    'Lead Design Consultant 03 (LDC03)',
+    'Lead Design Consultant 04 (LDC04)',
+    'Lead Design Consultant 05 (LDC05)',
+    'Project Management Consultant (PMC)',
+  ],
+  areas: ['All Areas (ZZ)'],
+  buildingIds: [
+    'All (ZZ)',
+    'Building 01 (B1)',
+  ],
+  levelAndLocations: [
+    'No Level Applicable (XX)',
+    'Multiple Levels (ZZ)',
+    'Mezzanine Floor (MZ)',
+    'Ground Dloor (00)',
+    'First Floor (01)',
+  ],
+  fileTypes: [
+    'Affection Plan (AP)',
+    'Agenda (AG)',
+    'Agreement (AT)',
+    'Audit Report (AR)',
+    'Bill of Quantities (BQ)',
+    'Bond (BD)',
+  ],
+  disciplines: [
+    'Acoustic (AE)',
+    'Administration (AD)',
+    'Air-Conditioning (AC)',
+    'Aircraft Warning System (AW)',
+    'Architectural (AR)',
+    'Audio Visual (AV)',
+  ],
+  numberHint: '5 digit number (manual input)',
+};
+
 export const statusFlow = [
-  'Draft',
-  'Submitted',
-  'Under Review',
-  'Approved',
-  'Rejected',
-  'Published',
-  'Closed',
-  'Archived',
+  'INITIATED',
+  'INTERNALLY_REVIEWED',
+  'INTERNALLY_APPROVED',
+  'QA_APPROVED',
+  'RECOMMENDED_FOR_APPROVAL',
+  'APPROVED',
 ];
 
-export const stageGates = ['WIP', 'Shared', 'Published', 'Archive'];
+export const stageGates = ['WIP', 'Shared', 'Published'];
 
 export const roleCapabilityMatrix = {
-  'Client': {
-    create: true,
+  'Internal Team Reviewer': {
+    create: false,
     upload: true,
     review: true,
+    approve: false,
+    sendBack: true,
+    publish: false,
+    close: false,
+  },
+  'Internal Team Approver': {
+    create: false,
+    upload: true,
+    review: false,
     approve: true,
     sendBack: true,
-    publish: true,
-    close: true,
+    publish: false,
+    close: false,
   },
-  Developer: {
-    create: true,
+  'Consultant QA Team': {
+    create: false,
     upload: true,
     review: true,
-    approve: true,
+    approve: false,
     sendBack: true,
-    publish: true,
-    close: true,
+    publish: false,
+    close: false,
   },
-  'Designer': {
-    create: true,
+  'Consultant Reviewer': {
+    create: false,
     upload: true,
     review: true,
+    approve: false,
+    sendBack: true,
+    publish: false,
+    close: false,
+  },
+  'Consultant Approver': {
+    create: false,
+    upload: true,
+    review: false,
     approve: true,
     sendBack: true,
     publish: true,
@@ -78,78 +148,31 @@ export const roleCapabilityMatrix = {
 
 export const tickets = [
   {
-    id: 'TKT-901',
+    id: 'TKT-00950',
     type: 'Shop Drawing Submission',
-    title: 'HVAC shop drawing package - Block A',
-    project: 'Project A',
+    title: 'Podium slab reinforcement submission',
+    project: 'Project Name (PRJXX)',
+    workPackage: 'Early Works (EW)',
+    originator: 'Project Management Consultant (PMC)',
+    area: 'All Areas (ZZ)',
+    buildingId: 'Building 01 (B1)',
+    levelAndLocation: 'Ground Dloor (00)',
+    metadataFileType: 'Agenda (AG)',
+    discipline: 'Administration (AD)',
+    fileName: 'Podium_Rebar_Agenda.pdf',
+    fileData: '',
+    fileType: 'application/pdf',
     createdByRole: 'Contractor',
-    reviewByRole: 'Designer',
-    approveByRole: 'Client',
-    closeByRole: 'Designer',
+    reviewByRole: 'Internal Team Reviewer',
+    approveByRole: 'Consultant Approver',
+    closeByRole: 'Consultant Approver',
     priority: 'High',
-    lifecycleStatus: 'Submitted',
+    lifecycleStatus: 'INITIATED',
     stageGate: 'WIP',
-    status: 'Submitted to Designer',
-    currentOwnerRole: 'Designer',
+    status: 'INITIATED',
+    currentOwnerRole: 'Internal Team Reviewer',
     dueDate: '2026-02-15',
     linkedDocument: 'DOC-MEP-088',
-    internalTicket: false,
-    history: [],
-  },
-  {
-    id: 'TKT-902',
-    type: 'RFI',
-    title: 'Clarification on fire damper access panel size',
-    project: 'Project B',
-    createdByRole: 'Contractor',
-    reviewByRole: 'Designer',
-    approveByRole: 'Developer',
-    closeByRole: 'Designer',
-    priority: 'Medium',
-    lifecycleStatus: 'Under Review',
-    stageGate: 'Shared',
-    status: 'Sent to Developer',
-    currentOwnerRole: 'Developer',
-    dueDate: '2026-02-16',
-    linkedDocument: 'DOC-ARC-014',
-    internalTicket: false,
-    history: [],
-  },
-  {
-    id: 'TKT-903',
-    type: 'Drawing Revision',
-    title: 'Podium facade louver redesign',
-    project: 'Project C',
-    createdByRole: 'Designer',
-    reviewByRole: 'Developer',
-    approveByRole: 'Client',
-    closeByRole: 'Developer',
-    priority: 'High',
-    lifecycleStatus: 'Approved',
-    stageGate: 'Shared',
-    status: 'Waiting Client Final Approval',
-    currentOwnerRole: 'Client',
-    dueDate: '2026-02-17',
-    linkedDocument: 'DOC-ARC-014',
-    internalTicket: false,
-    history: [],
-  },
-  {
-    id: 'TKT-904',
-    type: 'Inspection Request',
-    title: 'Site inspection pending for podium slab',
-    project: 'Project A',
-    createdByRole: 'Contractor',
-    reviewByRole: 'Designer',
-    approveByRole: 'Developer',
-    closeByRole: 'Developer',
-    priority: 'Medium',
-    lifecycleStatus: 'Rejected',
-    stageGate: 'WIP',
-    status: 'Sent Back to Contractor',
-    currentOwnerRole: 'Contractor',
-    dueDate: '2026-02-20',
-    linkedDocument: 'DOC-STR-001',
     internalTicket: true,
     history: [],
   },
@@ -158,12 +181,12 @@ export const tickets = [
 export const reviewTasks = [
   {
     id: 'RVW-1203',
-    ticketId: 'TKT-901',
-    title: 'Shop drawing technical review',
+    ticketId: 'TKT-00950',
+    title: 'Structural package technical review',
     createdBy: 'Contractor',
-    reviewer: 'Designer',
-    approver: 'Client',
-    status: 'Under Review',
+    reviewer: 'Internal Team Reviewer',
+    approver: 'Consultant Approver',
+    status: 'INITIATED',
     stageGate: 'WIP',
     dueDate: '2026-02-15',
   },
@@ -172,10 +195,10 @@ export const reviewTasks = [
     ticketId: 'TKT-902',
     title: 'RFI response validation',
     createdBy: 'Contractor',
-    reviewer: 'Designer',
-    approver: 'Developer',
-    status: 'Submitted',
-    stageGate: 'Shared',
+    reviewer: 'Internal Team Approver',
+    approver: 'Consultant QA Team',
+    status: 'INTERNALLY_REVIEWED',
+    stageGate: 'WIP',
     dueDate: '2026-02-16',
   },
 ];
@@ -233,7 +256,7 @@ export const qualityIssues = [
   {
     id: 'NC-301',
     document: 'DOC-ARC-014',
-    raisedBy: 'Designer',
+    raisedBy: 'Consultant QA Team',
     assignedTo: 'Contractor',
     status: 'Open',
     dueDate: '2026-02-18',
@@ -241,7 +264,7 @@ export const qualityIssues = [
   {
     id: 'NC-302',
     document: 'DOC-MEP-088',
-    raisedBy: 'Developer',
+    raisedBy: 'Internal Team Approver',
     assignedTo: 'Contractor',
     status: 'In Progress',
     dueDate: '2026-02-19',
@@ -252,7 +275,7 @@ export const transmittals = [
   {
     id: 'TRN-432',
     title: 'Package 4 IFC Issue',
-    sender: 'Developer',
+    sender: 'Internal Team Approver',
     recipient: 'Contractor',
     status: 'Acknowledged',
     date: '2026-02-12',
@@ -260,7 +283,7 @@ export const transmittals = [
   {
     id: 'TRN-433',
     title: 'MEP Coordination Update',
-    sender: 'Designer',
+    sender: 'Consultant Reviewer',
     recipient: 'Contractor',
     status: 'Sent',
     date: '2026-02-13',
@@ -280,17 +303,19 @@ export const archivedProjects = [
 ];
 
 export const adminUsers = [
-  { name: 'Faris Ahmed', email: 'faris@aldar.demo', role: 'Developer', level: 'L3', permission: 'Approve', status: 'Active' },
-  { name: 'Maya Khan', email: 'maya@aldar.demo', role: 'Designer', level: 'L2', permission: 'Review', status: 'Active' },
-  { name: 'Lina Saleh', email: 'lina@aldar.demo', role: 'Client', level: 'L3', permission: 'Approve', status: 'Active' },
+  { name: 'Faris Ahmed', email: 'faris@aldar.demo', role: 'Internal Team Approver', level: 'L3', permission: 'Approve', status: 'Active' },
+  { name: 'Maya Khan', email: 'maya@aldar.demo', role: 'Consultant QA Team', level: 'L2', permission: 'Review', status: 'Active' },
+  { name: 'Lina Saleh', email: 'lina@aldar.demo', role: 'Consultant Approver', level: 'L3', permission: 'Approve', status: 'Active' },
   { name: 'Rashed Ali', email: 'rashed@aldar.demo', role: 'Contractor', level: 'L1', permission: 'View', status: 'Active' },
 ];
 
 export const roles = [
-  { role: 'Client', create: 'Yes', review: 'Yes', approve: 'Yes', sendBack: 'Yes', publish: 'Yes', close: 'Yes', users: 8 },
-  { role: 'Developer', create: 'Yes', review: 'Yes', approve: 'Yes', sendBack: 'Yes', publish: 'Yes', close: 'Yes', users: 3 },
-  { role: 'Designer', create: 'Yes', review: 'Yes', approve: 'Yes', sendBack: 'Yes', publish: 'Yes', close: 'Yes', users: 11 },
-  { role: 'Contractor', create: 'Yes', review: 'No', approve: 'No', sendBack: 'Yes (Internal)', publish: 'No', close: 'No', users: 22 },
+  { role: 'Contractor', create: 'Yes', review: 'No', approve: 'No', sendBack: 'No', publish: 'No', close: 'No', users: 22 },
+  { role: 'Internal Team Reviewer', create: 'No', review: 'Yes', approve: 'No', sendBack: 'Yes', publish: 'No', close: 'No', users: 11 },
+  { role: 'Internal Team Approver', create: 'No', review: 'No', approve: 'Yes', sendBack: 'Yes', publish: 'No', close: 'No', users: 7 },
+  { role: 'Consultant QA Team', create: 'No', review: 'Yes', approve: 'No', sendBack: 'Yes', publish: 'No', close: 'No', users: 6 },
+  { role: 'Consultant Reviewer', create: 'No', review: 'Yes', approve: 'No', sendBack: 'Yes', publish: 'No', close: 'No', users: 4 },
+  { role: 'Consultant Approver', create: 'No', review: 'No', approve: 'Yes', sendBack: 'Yes', publish: 'Yes', close: 'Yes', users: 3 },
 ];
 
 export const auditLogs = [
@@ -307,40 +332,57 @@ export const auditLogs = [
   {
     id: 'AUD-8002',
     timestamp: '2026-02-14 09:31:55',
-    user: 'Designer',
+    user: 'Internal Team Reviewer',
     action: 'REVIEW_TICKET',
     entity: 'TKT-901',
     details: 'Reviewed and approved with comments',
-    beforeValue: 'Submitted',
-    afterValue: 'Approved',
+    beforeValue: 'INITIATED',
+    afterValue: 'INTERNALLY_REVIEWED',
   },
   {
     id: 'AUD-8003',
     timestamp: '2026-02-14 10:02:09',
-    user: 'Client',
+    user: 'Consultant Approver',
     action: 'PUBLISH_DOCUMENT',
     entity: 'TKT-901',
     details: 'Final approval completed, moved to published',
-    beforeValue: 'Approved',
-    afterValue: 'Published',
+    beforeValue: 'RECOMMENDED_FOR_APPROVAL',
+    afterValue: 'APPROVED',
   },
 ];
 
 export const dashboardStats = [
-  { label: 'Open Tickets', value: 24 },
-  { label: 'Under Review', value: 7 },
-  { label: 'Published', value: 12 },
-  { label: 'Closed Today', value: 9 },
+  { label: 'Initiated', value: 24 },
+  { label: 'In Internal Review', value: 7 },
+  { label: 'QA Approved', value: 12 },
+  { label: 'Final Approved', value: 9 },
 ];
 
 export const demoJourneySteps = [
-  'Contractor creates shop drawing ticket and submits (WIP).',
-  'Designer reviews and approves or sends back.',
-  'Developer performs compliance review when required.',
-  'Client gives final approval and publishes.',
-  'Contractor and Designer handle post-publish issues.',
-  'Tickets are closed and archived with full audit trail.',
+  'Contractor uploads document and submits as INITIATED.',
+  'Internal Team Reviewer approves to INTERNALLY_REVIEWED or rejects internally.',
+  'Internal Team Approver issues as INTERNALLY_APPROVED or rejects internally.',
+  'Consultant QA and Consultant Reviewer complete QA and recommendation stages.',
+  'Consultant Approver issues APPROVED or REJECTED final decision.',
+  'Any rejection returns to Contractor for revision and resubmission to INITIATED.',
 ];
+
+[
+  tickets,
+  reviewTasks,
+  documents,
+  documentVersions,
+  documentActivity,
+  qualityIssues,
+  transmittals,
+  integrations,
+  archivedProjects,
+  adminUsers,
+  roles,
+  auditLogs,
+  dashboardStats,
+  demoJourneySteps,
+].forEach((dataset) => dataset.splice(1));
 
 export const documentOptions = documents.map((doc) => ({
   value: doc.id,
@@ -348,12 +390,12 @@ export const documentOptions = documents.map((doc) => ({
 }));
 
 export function getRoleCapability(role) {
-  return roleCapabilityMatrix[role] || roleCapabilityMatrix['Client'];
+  return roleCapabilityMatrix[role] || roleCapabilityMatrix['Contractor'];
 }
 
 export function canRoleApproveTicket(role, ticket) {
   if (!getRoleCapability(role).approve) return false;
-  if (role === 'Contractor') return false;
+  if (role === 'Contractor' || role === ticket.createdByRole) return false;
   const roleRank = authorityOrder.indexOf(role);
   const creatorRank = authorityOrder.indexOf(ticket.createdByRole);
   if (roleRank === -1 || creatorRank === -1) return false;

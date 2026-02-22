@@ -20,10 +20,12 @@ function WorkflowSelector({ states }) {
       <label>
         Approver Role
         <select>
-          <option>Client</option>
-          <option>Developer</option>
-          <option>Designer</option>
           <option>Contractor</option>
+          <option>Internal Team Reviewer</option>
+          <option>Internal Team Approver</option>
+          <option>Consultant QA Team</option>
+          <option>Consultant Reviewer</option>
+          <option>Consultant Approver</option>
         </select>
       </label>
       <label>
@@ -37,9 +39,9 @@ function WorkflowSelector({ states }) {
       <label>
         Role Action
         <select>
-          <option>Review</option>
-          <option>Approve</option>
-          <option>Send Back</option>
+          <option>Initiate</option>
+          <option>Review Approved</option>
+          <option>Reject</option>
         </select>
       </label>
       <label>

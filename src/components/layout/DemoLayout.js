@@ -32,10 +32,12 @@ function DemoLayout({ role, onRoleChange }) {
         <label className="field role-field" htmlFor="role-select">
           <span>Role</span>
           <select id="role-select" value={role} onChange={(event) => onRoleChange(event.target.value)}>
-            <option>Client</option>
-            <option>Developer</option>
-            <option>Designer</option>
             <option>Contractor</option>
+            <option>Internal Team Reviewer</option>
+            <option>Internal Team Approver</option>
+            <option>Consultant QA Team</option>
+            <option>Consultant Reviewer</option>
+            <option>Consultant Approver</option>
           </select>
         </label>
       </header>
