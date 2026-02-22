@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import PriorityChip from './PriorityChip';
 import StatusChip from './StatusChip';
 
@@ -5,7 +6,11 @@ function TicketCard({ ticket, onClick }) {
   return (
     <article className="ticket-card" onClick={onClick} role="button" tabIndex={0}>
       <div className="ticket-card-top">
-        <strong>{ticket.id}</strong>
+        <strong>
+          <Link to={`/tickets/${ticket.id}`} onClick={(event) => event.stopPropagation()}>
+            {ticket.id}
+          </Link>
+        </strong>
         <StatusChip status={ticket.status} />
       </div>
       <h3>{ticket.title}</h3>

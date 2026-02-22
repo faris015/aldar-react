@@ -2,18 +2,22 @@ import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useTicketStore } from '../context/TicketStore';
-import { ticketTypes } from '../data/demoData';
+import { ticketCreationMetadata } from '../data/demoData';
+import formatStatusLabel from '../utils/formatStatusLabel';
 
 const defaultUpdateForm = {
-  type: 'Shop Drawing Submission',
   title: '',
-  description: '',
-  project: 'Project A',
+  project: '',
+  workPackage: '',
+  originator: '',
+  area: '',
+  buildingId: '',
+  levelAndLocation: '',
+  metadataFileType: '',
   fileName: '',
   fileData: '',
   fileType: '',
-  discipline: 'Architectural',
-  priority: 'High',
+  discipline: '',
 };
 
 function WorkflowTasksPage() {
@@ -49,41 +53,59 @@ function WorkflowTasksPage() {
       return tickets.filter((ticket) => ticket.currentOwnerRole === 'Contractor');
     }
     return tickets.filter(
-      (ticket) => ticket.currentOwnerRole === role && ticket.lifecycleStatus !== 'Published'
+      (ticket) => ticket.currentOwnerRole === role && ticket.status !== 'APPROVED'
     );
   }, [role, tickets]);
 
   function openUpdateForm(task) {
     setEditingTicketId(task.id);
     setUpdateForm({
-      type: task.type || 'Shop Drawing Submission',
       title: task.title || '',
-      description: task.description || '',
-      project: task.project || 'Project A',
+      project: task.project || '',
+      workPackage: task.workPackage || '',
+      originator: task.originator || '',
+      area: task.area || '',
+      buildingId: task.buildingId || '',
+      levelAndLocation: task.levelAndLocation || '',
+      metadataFileType: task.metadataFileType || '',
       fileName: task.fileName || '',
       fileData: task.fileData || '',
       fileType: task.fileType || '',
-      discipline: task.discipline || 'Architectural',
-      priority: task.priority || 'High',
+      discipline: task.discipline || '',
     });
   }
 
   function submitUpdate() {
     if (!editingTicketId) return;
-    if (!updateForm.type || !updateForm.title.trim() || !updateForm.description.trim() || !updateForm.project || !updateForm.discipline || !updateForm.priority) {
+    if (
+      !updateForm.title.trim()
+      || !updateForm.project
+      || !updateForm.workPackage
+      || !updateForm.originator
+      || !updateForm.area
+      || !updateForm.buildingId
+      || !updateForm.levelAndLocation
+      || !updateForm.metadataFileType
+      || !updateForm.discipline
+      || !updateForm.fileName
+    ) {
       return;
     }
 
     resubmit(editingTicketId, role, {
-      type: updateForm.type,
+      type: 'Shop Drawing Submission',
       title: updateForm.title.trim(),
-      description: updateForm.description.trim(),
       project: updateForm.project,
+      workPackage: updateForm.workPackage,
+      originator: updateForm.originator,
+      area: updateForm.area,
+      buildingId: updateForm.buildingId,
+      levelAndLocation: updateForm.levelAndLocation,
+      metadataFileType: updateForm.metadataFileType,
       fileName: updateForm.fileName || '',
       fileData: updateForm.fileData || '',
       fileType: updateForm.fileType || '',
       discipline: updateForm.discipline,
-      priority: updateForm.priority,
     });
 
     setEditingTicketId('');
@@ -94,7 +116,7 @@ function WorkflowTasksPage() {
     <section className="screen">
       <div className="screen-header">
         <h2>Approval Workflow</h2>
-        <p>Role queue for review, approve, send back, and final approval.</p>
+        <p>Role queue for final approved workflow stages and rejection returns.</p>
       </div>
 
       {role === 'Contractor' && editingTicketId ? (
@@ -102,21 +124,75 @@ function WorkflowTasksPage() {
           <h3>Update Ticket</h3>
           <div className="form-grid">
             <label className="field">
-              <span>Ticket Type</span>
-              <select value={updateForm.type} onChange={(event) => setUpdateForm((prev) => ({ ...prev, type: event.target.value }))}>
-                {ticketTypes.map((type) => (
-                  <option key={type}>{type}</option>
+              <span>Work Package</span>
+              <select value={updateForm.workPackage} onChange={(event) => setUpdateForm((prev) => ({ ...prev, workPackage: event.target.value }))}>
+                <option value="">Select work package</option>
+                {ticketCreationMetadata.workPackages.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Project</span>
+              <select value={updateForm.project} onChange={(event) => setUpdateForm((prev) => ({ ...prev, project: event.target.value }))}>
+                <option value="">Select project</option>
+                {ticketCreationMetadata.projects.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Originator</span>
+              <select value={updateForm.originator} onChange={(event) => setUpdateForm((prev) => ({ ...prev, originator: event.target.value }))}>
+                <option value="">Select originator</option>
+                {ticketCreationMetadata.originators.map((option) => (
+                  <option key={option}>{option}</option>
                 ))}
               </select>
             </label>
             <label className="field">
               <span>Discipline</span>
               <select value={updateForm.discipline} onChange={(event) => setUpdateForm((prev) => ({ ...prev, discipline: event.target.value }))}>
-                <option>Architectural</option>
-                <option>Structural</option>
-                <option>Electrical</option>
-                <option>Mechanical</option>
-                <option>Civil</option>
+                <option value="">Select discipline</option>
+                {ticketCreationMetadata.disciplines.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Area</span>
+              <select value={updateForm.area} onChange={(event) => setUpdateForm((prev) => ({ ...prev, area: event.target.value }))}>
+                <option value="">Select area</option>
+                {ticketCreationMetadata.areas.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Building ID / Type / Component ID</span>
+              <select value={updateForm.buildingId} onChange={(event) => setUpdateForm((prev) => ({ ...prev, buildingId: event.target.value }))}>
+                <option value="">Select building ID</option>
+                {ticketCreationMetadata.buildingIds.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>Level and Location</span>
+              <select value={updateForm.levelAndLocation} onChange={(event) => setUpdateForm((prev) => ({ ...prev, levelAndLocation: event.target.value }))}>
+                <option value="">Select level and location</option>
+                {ticketCreationMetadata.levelAndLocations.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <span>File Type</span>
+              <select value={updateForm.metadataFileType} onChange={(event) => setUpdateForm((prev) => ({ ...prev, metadataFileType: event.target.value }))}>
+                <option value="">Select file type</option>
+                {ticketCreationMetadata.fileTypes.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
               </select>
             </label>
             <label className="field full-width">
@@ -127,32 +203,7 @@ function WorkflowTasksPage() {
               />
             </label>
             <label className="field full-width">
-              <span>Description</span>
-              <textarea
-                rows="5"
-                value={updateForm.description}
-                onChange={(event) => setUpdateForm((prev) => ({ ...prev, description: event.target.value }))}
-              />
-            </label>
-            <label className="field">
-              <span>Project</span>
-              <select value={updateForm.project} onChange={(event) => setUpdateForm((prev) => ({ ...prev, project: event.target.value }))}>
-                <option>Project A</option>
-                <option>Project B</option>
-                <option>Project C</option>
-              </select>
-            </label>
-            <label className="field">
-              <span>Priority</span>
-              <select value={updateForm.priority} onChange={(event) => setUpdateForm((prev) => ({ ...prev, priority: event.target.value }))}>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-                <option>Critical</option>
-              </select>
-            </label>
-            <label className="field full-width">
-              <span>File Upload (Optional)</span>
+              <span>File Upload</span>
               <input
                 type="file"
                 accept=".pdf,.dwg,.doc,.docx"
@@ -185,9 +236,8 @@ function WorkflowTasksPage() {
             <tr>
               <th>Ticket ID</th>
               <th>Request</th>
-              <th>Created By</th>
-              <th>Reviewer</th>
-              <th>Stage Gate</th>
+              <th>Work Package</th>
+              <th>Discipline</th>
               <th>Status</th>
               <th>Current Owner</th>
               <th className="created-date-col">Created Date</th>
@@ -197,17 +247,16 @@ function WorkflowTasksPage() {
           <tbody>
             {tasks.length === 0 ? (
               <tr>
-                <td className="empty-state-cell" colSpan={9}>No tickets found</td>
+                <td className="empty-state-cell" colSpan={8}>No tickets found</td>
               </tr>
             ) : (
               tasks.map((task) => (
                 <tr key={task.id}>
-                  <td>{task.id}</td>
+                  <td><Link to={`/tickets/${task.id}`}>{task.id}</Link></td>
                   <td>{task.title}</td>
-                  <td>{task.createdByRole}</td>
-                  <td>{task.reviewByRole}</td>
-                  <td>{task.stageGate}</td>
-                  <td>{task.status}</td>
+                  <td>{task.workPackage || '-'}</td>
+                  <td>{task.discipline || '-'}</td>
+                  <td>{formatStatusLabel(task.status)}</td>
                   <td>{task.currentOwnerRole}</td>
                   <td className="created-date-col">{task.createdDate}</td>
                   <td>
@@ -231,11 +280,11 @@ function WorkflowTasksPage() {
           ) : (
             tasks.map((task) => (
               <article key={task.id} className="mobile-card">
-                <h4>{task.id}</h4>
+                <h4><Link to={`/tickets/${task.id}`}>{task.id}</Link></h4>
                 <p>{task.title}</p>
-                <p>{task.createdByRole} -> {task.reviewByRole}</p>
-                <p>{task.stageGate}</p>
-                <p>{task.status}</p>
+                <p>Work Package: {task.workPackage || '-'}</p>
+                <p>Discipline: {task.discipline || '-'}</p>
+                <p>{formatStatusLabel(task.status)}</p>
                 <p>Owner: {task.currentOwnerRole}</p>
                 <small>Created {task.createdDate}</small>
                 {role === 'Contractor' ? (

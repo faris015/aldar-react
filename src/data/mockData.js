@@ -102,3 +102,15 @@ export const notifications = [
   { id: 2, title: 'SLA breach', message: 'TCK-2398 is overdue', time: '20m ago', ticketId: 'TCK-2398' },
   { id: 3, title: 'Status change', message: 'TCK-2402 moved to Review', time: '1h ago', ticketId: 'TCK-2402' },
 ];
+
+[
+  kpis,
+  tickets,
+  activities,
+  attachments,
+  timelineEvents,
+  folderTree,
+  workflowList,
+  users,
+  notifications,
+].forEach((dataset) => dataset.splice(1));

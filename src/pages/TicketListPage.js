@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PriorityChip from '../components/core/PriorityChip';
 import StatusChip from '../components/core/StatusChip';
 import TicketCard from '../components/core/TicketCard';
@@ -47,7 +47,7 @@ function TicketListPage() {
             ) : (
               tickets.map((ticket) => (
                 <tr key={ticket.id}>
-                  <td>{ticket.id}</td>
+                  <td><Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link></td>
                   <td>{ticket.title}</td>
                   <td>{ticket.project}</td>
                   <td>{ticket.discipline}</td>
